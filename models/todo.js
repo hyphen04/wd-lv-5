@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       console.log("Overdue");
       console.log(
         (await Todo.overdue())
-          .map((todo) => {
-            return todo.displayableString();
+          .map((item) => {
+            return item.displayableString();
           })
           .join("\n")
       );
@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
       console.log("Due Today");
       console.log(
         (await Todo.dueToday())
-          .map((todo) => {
-            return todo.displayableString();
+          .map((item) => {
+            return item.displayableString();
           })
           .join("\n")
       );
@@ -31,8 +31,8 @@ module.exports = (sequelize, DataTypes) => {
       console.log("Due Later");
       console.log(
         (await Todo.dueLater())
-          .map((todo) => {
-            return todo.displayableString();
+          .map((item) => {
+            return item.displayableString();
           })
           .join("\n")
       );
@@ -75,7 +75,11 @@ module.exports = (sequelize, DataTypes) => {
 
     displayableString() {
       let checkbox = this.completed ? "[x]" : "[ ]";
-      return `${this.id}. ${checkbox} ${this.title} ${this.dueDate}`;
+      return `${this.id}. ${checkbox} ${this.title} ${this.dueDate} ${
+        this.dueDate == new Date().toLocaleDateString("en-CA")
+          ? ""
+          : this.dueDate
+      }`.trim();
     }
   }
   Todo.init(
