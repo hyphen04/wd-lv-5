@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       console.log("Overdue");
       console.log(
         (await Todo.overdue())
-          .map((item) => {
-            return item.displayableString();
+          .map((todo) => {
+            return todo.displayableString();
           })
           .join("\n")
       );
@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
       console.log("Due Today");
       console.log(
         (await Todo.dueToday())
-          .map((item) => {
-            return item.displayableString();
+          .map((todo) => {
+            return todo.displayableString();
           })
           .join("\n")
       );
@@ -31,35 +31,36 @@ module.exports = (sequelize, DataTypes) => {
       console.log("Due Later");
       console.log(
         (await Todo.dueLater())
-          .map((item) => {
-            return item.displayableString();
+          .map((todo) => {
+            return todo.displayableString();
           })
           .join("\n")
       );
     }
 
     static async overdue() {
-      return await Todo.findAll({
-        where: {
-          dueDate: { [Op.lt]: new Date().toLocaleDateString("en-CA") },
-        },
-      });
-    }
+      
+        return await Todo.findAll({
+          where: {
+            dueDate: { [Op.lt]: new Date().toLocaleDateString("en-CA") },
+          }
+    })}
 
     static async dueToday() {
-      return await Todo.findAll({
-        where: {
-          dueDate: { [Op.eq]: new Date().toLocaleDateString("en-CA") },
-        },
-      });
+        return await Todo.findAll({
+          where: {
+            dueDate: { [Op.eq]: new Date().toLocaleDateString("en-CA") },
+          },
+        });
     }
 
     static async dueLater() {
-      return await Todo.findAll({
-        where: {
-          dueDate: { [Op.gt]: new Date().toLocaleDateString("en-CA") },
-        },
-      });
+      
+        return await Todo.findAll({
+          where: {
+            dueDate: { [Op.gt]: new Date().toLocaleDateString("en-CA") },
+          },
+        });
     }
 
     static async markAsComplete(id) {
@@ -75,8 +76,8 @@ module.exports = (sequelize, DataTypes) => {
 
     displayableString() {
       let checkbox = this.completed ? "[x]" : "[ ]";
-      return `${this.id}. ${checkbox} ${this.title} ${this.dueDate} ${
-        this.dueDate == new Date().toLocaleDateString("en-CA")
+      return `${this.id}. ${checkbox} ${this.title} ${
+        this.dueDate === new Date().toLocaleDateString("en-CA")
           ? ""
           : this.dueDate
       }`.trim();
